@@ -91,11 +91,13 @@ pa_asyncq *pa_asyncq_new(unsigned size) {
     l->waiting_for_post = false;
 
     if (!(l->read_fdsem = pa_fdsem_new())) {
+        pa_log("failed to get l->read_fdsem");
         pa_xfree(l);
         return NULL;
     }
 
     if (!(l->write_fdsem = pa_fdsem_new())) {
+        pa_log("failed to get l->write_fdsem");
         pa_fdsem_free(l->read_fdsem);
         pa_xfree(l);
         return NULL;

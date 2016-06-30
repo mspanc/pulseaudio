@@ -66,6 +66,7 @@ pa_fdsem *pa_fdsem_new(void) {
 #endif
     {
         if (pa_pipe_cloexec(f->fds) < 0) {
+            pa_log("pa_pipe_cloexec < 0");
             pa_xfree(f);
             return NULL;
         }

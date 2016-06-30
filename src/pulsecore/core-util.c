@@ -3488,21 +3488,32 @@ int pa_pipe_cloexec(int pipefd[2]) {
     int r;
 
 #ifdef HAVE_PIPE2
-    if ((r = pipe2(pipefd, O_CLOEXEC)) >= 0)
+    pa_log("have pipe2");
+    if ((r = pipe2(pipefd, O_CLOEXEC)) >= 0) {
+        pa_log("pipe2 >= 0");
         goto finish;
+    }
 
-    if (errno != EINVAL && errno != ENOSYS)
-        return r;
+    if (errno != EINVAL && errno != ENOSYS) {
+      pa_log("errno != EINVAL && errno != ENOSYS");
+
+      return r;
+    } else {
+      pa_log("errno == EINVAL || errno == ENOSYS");
+    }
 
 #endif
 
-    if ((r = pipe(pipefd)) >= 0)
-        goto finish;
+    if ((r = pipe(pipefd)) >= 0) {
+      pa_log("pipe >= 0");
+      goto finish;
+    }
 
     /* return error */
     return r;
 
 finish:
+    pa_log("pa_pipe_cloexec finish");
     pa_make_fd_cloexec(pipefd[0]);
     pa_make_fd_cloexec(pipefd[1]);
 
